@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Return user information or null if the user is not logged in
  */
-class GetLoggedUserUseCase @Inject constructor(private val userRepository: UserRepository) {
+class GetLoggedUserUseCase @Inject constructor(private val userRepository: UserRepository): GetLoginStateUseCase {
 
-    operator fun invoke() : Flow<User?> = userRepository.loggedInUser
+    override operator fun invoke() : Flow<User?> = userRepository.loggedInUser
 }

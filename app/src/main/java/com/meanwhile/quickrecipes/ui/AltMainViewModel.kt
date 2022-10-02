@@ -38,13 +38,13 @@ class AltMainViewModel @Inject constructor(
             if (isLoggedIn) {
                 // We trigger our use cases. Use combine to merge all the outputs in our UiState
                 combine(getUserBadgesUseCase(), getUserAddressUseCase()){ badges, address ->
-                    UiState( badges, address)
+                    UiState.LoggedIn( userBadges = badges, userAddress = address)
                 }
             } else {
-                // Return the UiState which represents the user not being loggedin
-                flowOf(UiState())
+                // Return the UiState which represents the user is logged out
+                flowOf(UiState.LoggedOut)
             }
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), UiState()) // TODO add expiration time
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), UiState.Empty)
 
     fun onLoginClicked() {
         viewModelScope.launch {
@@ -57,5 +57,4 @@ class AltMainViewModel @Inject constructor(
             doLogoutUseCase()
         }
     }
-
 }

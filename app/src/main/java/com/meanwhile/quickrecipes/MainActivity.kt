@@ -70,21 +70,21 @@ fun QuickRecipesMainScreenContent(
             .padding(24.dp)
     ) {
 
-        uiState.userAddress?.let { address ->
+        (uiState as? UiState.LoggedIn)?.userAddress?.let { address ->
             Text(text = address.street + address.zipCode)
         }
 
-        uiState.userBadges?.let{
+        (uiState as? UiState.LoggedIn)?.userBadges?.let{
             it.forEach { badge ->
                 Text(text = "Badge $badge")
             }
         }
 
-        Button(onClick = onLoginClick) {
+        Button(onClick = onLoginClick, enabled = uiState is UiState.LoggedOut) {
             Text(text = "Login")
         }
 
-        Button(onClick = onLogoutClick) {
+        Button(onClick = onLogoutClick, enabled = uiState is UiState.LoggedIn) {
             Text(text = "Logout")
         }
     }
@@ -94,7 +94,7 @@ fun QuickRecipesMainScreenContent(
 @Composable
 fun DefaultLoggedOutPreview() {
     QuickRecipesTheme {
-        QuickRecipesMainScreenContent(UiState(), {},{})
+        QuickRecipesMainScreenContent(UiState.LoggedOut, {},{})
     }
 }
 
@@ -102,7 +102,7 @@ fun DefaultLoggedOutPreview() {
 @Composable
 fun DefaultLoggedInPreview() {
     QuickRecipesTheme {
-        val state = UiState(
+        val state = UiState.LoggedIn(
             userAddress = Address("street", "0001"),
             userBadges = listOf(Badge("gold"), Badge("silver"))
         )
